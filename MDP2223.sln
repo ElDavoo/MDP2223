@@ -29,9 +29,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "6 - MDCT", "Exercises\6 - M
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "1 - Packbits", "Exercises\1 - Packbits\1 - Packbits.vcxproj", "{7B1808CD-0AD0-4E46-8115-CF17C9CE0D81}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2 - Huffman", "2 - Huffman\2 - Huffman.vcxproj", "{A3F7D65F-4AA8-44F1-A29C-50C4D8D75A12}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2 - Huffman", "Exercises\2 - Huffman\2 - Huffman.vcxproj", "{A3F7D65F-4AA8-44F1-A29C-50C4D8D75A12}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4 - YUV4MPEG2", "4 - YUV4MPEG2\4 - YUV4MPEG2.vcxproj", "{E662A241-FE91-48A9-8B43-CD1AEFA5E842}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4 - YUV4MPEG2", "Exercises\4 - YUV4MPEG2\4 - YUV4MPEG2.vcxproj", "{E662A241-FE91-48A9-8B43-CD1AEFA5E842}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
