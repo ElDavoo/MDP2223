@@ -1,0 +1,43 @@
+AABBCCDD 
+AA BB CC DD  Big Endian
+DD CC BB AA  Little Endian
+
+A0B1C2D3 
+A0 B1 C2 D3  Big Endian
+D3 C2 B1 A0  Little Endian
+
+
+266 -> output binario a 32 bit con segno in LE
+0A 01 00 00
+
+
+120 = 00000078 = 000.0111.1000
+ 35 = 00000023 = 000.0010.0011
+-98 = FFFFFF9E = 111.1001.1110
+
+000.0111.1000 000.0010.0011 111.1001.1110
+000011110000000010001111110011110
+00001111.00000000.10001111.11001111.0
+0F 00 8F CF 
+
+x = 120 = 00000078 = 000.0111.1000
+                            *
+x >> 4               000.0000.0111 AND
+x & 1                000.0000.0001
+		      
+
+abcd.efgh <-- 0 ==> bcdefgh0
+bcde.fgh0 <-- 0 ==> cdefgh00
+cdef.gh00 <-- 0 ==> defgh000
+defg.h000 <-- 0 ==> efgh0000
+efgh.0000 <-- 1 ==> fgh00001
+fgh0.0001 <-- 1 ==> gh000011
+gh00.0011 <-- 1 ==> h0000111
+h000.0111 <-- 1 ==> 00001111
+
+uint8_t buf;
+uint8_t bit; // deve essere 0 o 1
+
+buf = buf * 2 + bit;
+buf = (buf << 1) | bit;
+
