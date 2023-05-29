@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<!-- saved from url=(0042)http://netpbm.sourceforge.net/doc/ppm.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>PPM Format Specification</title>
+<meta name="manual_section" content="5">
+<style type="text/css"></style></head>
+<body>
+<h1>ppm</h1>
+Updated: 02 November 2013
+<br>
+<a href="http://netpbm.sourceforge.net/doc/ppm.html#index">Table Of Contents</a>
+
+<h2>NAME</h2>
+
+PPM - Netpbm color image format
+
+<h2 id="description">DESCRIPTION</h2>
+
+<p>This program is part of <a href="http://netpbm.sourceforge.net/doc/index.html">Netpbm</a>.
+
+</p><p>The PPM format is a lowest common denominator color image file
+format.
+
+</p><p>It should be noted that this format is egregiously inefficient.
+It is highly redundant, while containing a lot of information that the
+human eye can't even discern.  Furthermore, the format allows very
+little information about the image besides basic color, which means
+you may have to couple a file in this format with other independent
+information to get any decent use out of it.  However, it is very easy
+to write and analyze programs to process this format, and that is the
+point.
+
+</p><p>It should also be noted that files often conform to this format in
+every respect except the precise semantics of the sample values.
+These files are useful because of the way PPM is used as an
+intermediary format.  They are informally called PPM files, but to be
+absolutely precise, you should indicate the variation from true PPM.
+For example, "PPM using the red, green, and blue colors that the
+scanner in question uses."
+
+</p><p>The name "PPM" is an acronym derived from "Portable Pixel Map."
+Images in this format (or a precursor of it) were once also called
+"portable pixmaps."
+
+</p><h2 id="format">THE FORMAT</h2>
+
+<p>The format definition is as follows.  You can use the <a href="http://netpbm.sourceforge.net/doc/libnetpbm.html">libnetpbm</a> C subroutine library to read and
+interpret the format conveniently and accurately.
+
+</p><p>A PPM file consists of a sequence of one or more PPM images. There are
+no data, delimiters, or padding before, after, or between images.
+
+</p><p>Each PPM image consists of the following:
+
+</p><ol>
+<li>A "magic number" for identifying the file type.
+A ppm image's magic number is the two characters "P6".
+</li><li>
+Whitespace (blanks, TABs, CRs, LFs).
+</li><li>
+A width, formatted as ASCII characters in decimal.
+</li><li>
+Whitespace.
+</li><li>
+A height, again in ASCII decimal.
+</li><li>
+Whitespace.
+</li><li>
+The maximum color value (Maxval), again in ASCII decimal.  Must be less
+than 65536 and more than zero.
+
+</li><li>A single whitespace character (usually a newline).
+
+</li><li>A raster of Height rows, in order from top to bottom.  Each row
+consists of Width pixels, in order from left to right.  Each pixel is
+a triplet of red, green, and blue samples, in that order.  Each sample
+is represented in pure binary by either 1 or 2 bytes.  If the Maxval
+is less than 256, it is 1 byte.  Otherwise, it is 2 bytes.  The most
+significant byte is first.
+
+<p>A row of an image is horizontal.  A column is vertical.  The pixels
+in the image are square and contiguous.
+     
+</p><p>In the raster, the sample values are "nonlinear." They are
+proportional to the intensity of the ITU-R Recommendation BT.709 red,
+green, and blue in the pixel, adjusted by the BT.709 gamma transfer
+function.  (That transfer function specifies a gamma number of 2.2 and
+has a linear section for small intensities).  A value of Maxval for
+all three samples represents CIE D65 white and the most intense color
+in the color universe of which the image is part (the color universe
+is all the colors in all images to which this image might be
+compared).
+
+</p><p>ITU-R Recommendation BT.709 is a renaming of the former CCIR
+Recommendation 709.  When CCIR was absorbed into its parent
+organization, the ITU, ca. 2000, the standard was renamed.  This
+document once referred to the standard as CIE Rec. 709, but it isn't
+clear now that CIE ever sponsored such a standard.
+
+</p><p>Note that another popular color space is the newer sRGB.  A common
+variation on PPM is to substitute this color space for the one specified.
+
+</p><p>
+Note that a common variation on the PPM format is to have the sample
+values be "linear," i.e. as specified above except without
+the gamma adjustment.  <b>pnmgamma</b> takes such a PPM variant as
+input and produces a true PPM as output.
+
+</p></li></ol>
+
+<p>Strings starting with "#" may be comments, the same as
+with <a href="http://netpbm.sourceforge.net/doc/pbm.html">PBM</a>.
+
+</p><p>Note that you can use <b>pamdepth</b> to convert between a the
+format with 1 byte per sample and the one with 2 bytes per sample.
+
+</p><p>All characters referred to herein are encoded in ASCII.
+"newline" refers to the character known in ASCII as Line
+Feed or LF.  A "white space" character is space, CR, LF,
+TAB, VT, or FF (I.e. what the ANSI standard C isspace() function
+calls white space).
+
+</p><h3 id="plainppm">Plain PPM</h3>
+
+<p>There is actually another version of the PPM format that is fairly
+rare: "plain" PPM format.  The format above, which generally
+considered the normal one, is known as the "raw" PPM format.
+See <b><a href="http://netpbm.sourceforge.net/doc/pbm.html">pbm</a></b> for some commentary on how plain
+and raw formats relate to one another and how to use them.
+
+</p><p>The difference in the plain format is:
+
+</p><ul>
+<li>
+There is exactly one image in a file.
+</li><li>
+The magic number is P3 instead of P6.
+</li><li>
+Each sample in the raster is represented as an ASCII decimal number
+(of arbitrary size).
+</li><li>
+Each sample in the raster has white space before and after it.  There must
+be at least one character of white space between any two samples, but there
+is no maximum.  There is no particular separation of one pixel from another --
+just the required separation between the blue sample of one pixel from the
+red sample of the next pixel.
+</li><li>
+No line should be longer than 70 characters.
+</li></ul>
+
+<p>Here is an example of a small image in this format.
+</p><pre>P3
+# feep.ppm
+4 4
+15
+ 0  0  0    0  0  0    0  0  0   15  0 15
+ 0  0  0    0 15  7    0  0  0    0  0  0
+ 0  0  0    0  0  0    0 15  7    0  0  0
+15  0 15    0  0  0    0  0  0    0  0  0
+</pre>
+
+<p>There is a newline character at the end of each of these lines.
+
+</p><p>Programs that read this format should be as lenient as possible,
+accepting anything that looks remotely like a PPM image.
+
+
+</p><h2 id="internetmediatype">INTERNET MEDIA TYPE</h2>
+
+<p>No Internet Media Type (aka MIME type, content type) for PPM has been
+registered with IANA, but the value <tt>image/x-portable-pixmap</tt> is
+conventional.
+
+</p><p>Note that the PNM Internet Media Type <tt>image/x-portable-anymap</tt>
+also applies.
+
+
+</p><h2 id="filename">FILE NAME</h2>
+
+<p>There are no requirements on the name of a PPM file, but the convention is
+to use the suffix ".ppm".  "pnm" is also conventional, for
+cases where distinguishing between the particular subformats of PNM is not
+convenient.
+
+
+</p><h2 id="compatibility">COMPATIBILITY</h2>
+
+<p>Before April 2000, a raw format PPM file could not have a maxval greater
+than 255.  Hence, it could not have more than one byte per sample.  Old
+programs may depend on this.
+
+</p><p>Before July 2000, there could be at most one image in a PPM file.  As
+a result, most tools to process PPM files ignore (and don't read) any
+data after the first image.
+
+</p><h2 id="seealso">SEE ALSO</h2>
+
+<a href="http://netpbm.sourceforge.net/doc/pnm.html">pnm</a>,
+<a href="http://netpbm.sourceforge.net/doc/pgm.html">pgm</a>,
+<a href="http://netpbm.sourceforge.net/doc/pbm.html">pbm</a>,
+<a href="http://netpbm.sourceforge.net/doc/pam.html">pam</a>,
+<a href="http://netpbm.sourceforge.net/doc/directory.html">programs that process PPM</a>
+
+
+<hr>
+<h2 id="index">Table Of Contents</h2>
+<ul>
+<li><a href="http://netpbm.sourceforge.net/doc/ppm.html#description">DESCRIPTION</a>
+</li><li><a href="http://netpbm.sourceforge.net/doc/ppm.html#format">THE FORMAT</a>
+<ul>
+  <li><a href="http://netpbm.sourceforge.net/doc/ppm.html#plainppm">Plain PPM</a>
+    </li></ul>
+</li><li><a href="http://netpbm.sourceforge.net/doc/ppm.html#internetmediatype">INTERNET MEDIA TYPE</a>
+</li><li><a href="http://netpbm.sourceforge.net/doc/ppm.html#filename">FILE NAME</a>
+</li><li><a href="http://netpbm.sourceforge.net/doc/ppm.html#compatibility">COMPATIBILITY</a>
+</li><li><a href="http://netpbm.sourceforge.net/doc/ppm.html#seealso">SEE ALSO</a>
+</li></ul>
+
+
+</body></html>
