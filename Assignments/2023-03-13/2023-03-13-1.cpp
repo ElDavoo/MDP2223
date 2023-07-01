@@ -42,7 +42,7 @@ public:
 int main(int argc, char* argv[]) {
 
 	if (argc != 3) {
-		std::cout << "Usage: " << argv[0] << "<filein.txt> <fileout.txt>\n";
+		std::cout << "Usage: " << argv << "<filein.txt> <fileout.txt>\n";
 		return EXIT_FAILURE;
 	}
 
