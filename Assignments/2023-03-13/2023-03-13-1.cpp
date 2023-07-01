@@ -34,6 +34,10 @@ public:
 	void print(std::ostream &os) requires std::integral<T> {
 		for (const auto& pair : it()) {
 			os << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(pair.first) << std::dec << "\t" << pair.second << std::endl;
+			if (os.fail()) {
+				std::cout << "Error writing to stream." << std::endl;
+				exit(EXIT_FAILURE);
+			}
 		}
 	}
 };
@@ -49,13 +53,13 @@ int main(int argc, char* argv[]) {
 	std::ifstream is(argv[1], std::ios::binary);
 
 	if (is.fail()) {
-		printf("Error opening input file.\n");
+		std::cout << "Error opening input file." << std::endl;
 		return EXIT_FAILURE;
 	}
 
 	std::ofstream os(argv[2]);
 	if (os.fail()) {
-		printf("Error opening output file.\n");
+		std::cout << "Error opening output file." << std::endl;
 		return EXIT_FAILURE;
 	}
 

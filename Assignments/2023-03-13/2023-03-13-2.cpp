@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	std::ifstream ifs(argv[1], std::ios::binary);
+	std::ifstream ifs(argv[1]);
 	
 	if (ifs.fail()) {
 		std::cout << "Error opening input file" << std::endl;
@@ -36,6 +36,10 @@ int main(int argc, char* argv[]) {
 
 		ofs.write(reinterpret_cast<char*>(&ui), sizeof(int32_t));
 
+		if (ofs.fail()) {
+			std::cout << "Error writing to output file" << std::endl;
+			return EXIT_FAILURE;
+		}
 	}
 
 	return EXIT_SUCCESS;
