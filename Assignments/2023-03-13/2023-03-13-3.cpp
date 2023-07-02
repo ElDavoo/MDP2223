@@ -1,3 +1,5 @@
+#pragma warning(disable: 4710)
+
 #include <fstream>
 #include <iostream>
 #include <vector>
