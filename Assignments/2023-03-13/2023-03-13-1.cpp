@@ -1,85 +1,73 @@
-#pragma warning(disable: 4710)
-
-#include <algorithm>
-#include <concepts>
-#include <fstream>
 #include <iostream>
-#include <iomanip>
-#include <unordered_map> 
-
-template<typename KeyT, typename ValueT> auto sortMapByValue(std::unordered_map<KeyT, ValueT>& map) {
-
-	std::vector<std::pair<KeyT, ValueT>> sorted(map.begin(), map.end());
-	std::sort(sorted.begin(), sorted.end(), [](const auto& a, const auto& b) {
-		if (a.second != b.second) return a.second < b.second;
-		return a.first < b.first;
-		});
-	return sorted;
-
-}
+#include <fstream>
+#include <map>
+#include <unordered_map>
+#include 
 
 template<typename T, typename CountT = uint32_t>
-class frequencies {
-
+class frequ {
 	std::unordered_map<T, CountT> count_;
-
-	auto it() { return sortMapByValue(count_); }
-
-public:
 
 	void operator()(const T& val) {
 		++count_[val];
 	}
 
-	void print(std::ostream &os) requires std::integral<T> {
-		for (const auto& pair : it()) {
-			os << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(pair.first) << std::dec << "\t" << pair.second << std::endl;
-			if (os.fail()) {
-				std::cout << "Error writing to stream." << std::endl;
-				exit(EXIT_FAILURE);
-			}
-		}
-	}
+	auto begin() { return count_.begin(); }
+	auto end() { return count_.end(); }
+
+
+	auto cbegin() { return count_.cbegin(); }
+	auto cend() { return count_.cend(); }
 };
 
 
 int main(int argc, char* argv[]) {
-
 	if (argc != 3) {
-		std::cout << "Usage: " << argv << "<filein.txt> <fileout.txt>\n";
-		return EXIT_FAILURE;
+		std::cout << "Usage: " << argv[0] << "<filein.txt> <fileout.txt>\n";
+		return 1;
 	}
 
 	std::ifstream is(argv[1], std::ios::binary);
 
 	if (is.fail()) {
-		std::cout << "Error opening input file." << std::endl;
-		return EXIT_FAILURE;
+		printf("Error opening input file.\n");
+		return 1;
 	}
+
 
 	std::ofstream os(argv[2]);
 	if (os.fail()) {
-		std::cout << "Error opening output file." << std::endl;
-		return EXIT_FAILURE;
+		printf("Error opening output file.\n");
+		return 1;
 	}
 
-	frequencies<uint8_t> freq;
-
+//	std::map<uint8_t, unsigned int> m;
+	std::array<uint32_t, 256> m;
 	while (1) {
+		uint8_t x;
 
 		int num = is.get();
-
-		if (num == EOF || is.eof()) {
+		
+		if (num == EOF) {
 			break;
 		}
 
-		uint8_t x = static_cast<uint8_t>(num);
-		freq(x);
+		if (is.eof()) {
+			break;
+		}
+
+		uint8_t x = num;
+
+		std::basic_ios::fill(m.start(), m.end(), 0);
+		/*if (m.find(x) == m.end()) {
+			m[x] = 1;
+		}
+		else {
+			m[x]++;
+		}*/
 
 	}
 
-	freq.print(os);
-
-	return EXIT_SUCCESS;
+	return 0;
 
 }
