@@ -15,7 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="2023-03-03.cpp">
+    <Text Include="file01.txt" />
+    <Text Include="file02.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sort_int.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
