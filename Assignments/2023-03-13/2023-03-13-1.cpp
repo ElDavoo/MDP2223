@@ -2,24 +2,22 @@
 #include <fstream>
 #include <map>
 #include <unordered_map>
-#include 
+#include <algorithm>
+#include <cstdlib>
+#include <array>
+#include <iomanip>
 
-template<typename T, typename CountT = uint32_t>
-class frequ {
-	std::unordered_map<T, CountT> count_;
+typedef struct cha {
+	uint64_t f_;
+	uint8_t c_;
 
-	void operator()(const T& val) {
-		++count_[val];
-	}
-
-	auto begin() { return count_.begin(); }
-	auto end() { return count_.end(); }
-
-
-	auto cbegin() { return count_.cbegin(); }
-	auto cend() { return count_.cend(); }
-};
-
+	inline bool operator==(const cha& rhs) { return c_ == rhs.c_ && f_ == rhs.f_; }
+	inline bool operator!=(const cha& rhs) { return c_ != rhs.c_ || f_ != rhs.f_; }
+	inline bool operator< (const cha& rhs) { return f_ < rhs.f_; }
+	inline bool operator> (const cha& rhs) { return f_ > rhs.f_; }
+	inline bool operator<=(const cha& rhs) { return f_ <= rhs.f_; }
+	inline bool operator>=(const cha& rhs) { return f_ >= rhs.f_;	}
+}cha;
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
@@ -27,46 +25,41 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	std::ifstream is(argv[1], std::ios::binary);
+	std::array<cha, 256> ar{};
 
-	if (is.fail()) {
-		printf("Error opening input file.\n");
-		return 1;
+	for (int i = 0; i < 256; i++) ar[i].c_ = i;
+
+	std::ifstream is(argv[1], std::ios::binary);
+	if (!is) return EXIT_FAILURE;
+
+
+
+	uint8_t tmp;
+	while (is >> tmp) {
+		++ar[tmp].f_;
 	}
 
+	is.close();
+
+	/*struct
+	{
+		bool operator()(cha a, cha b) const { return a.c < b.c; }
+	}
+	customLess;*/
+	std::sort(ar.begin(), ar.end(), std::less<>());
 
 	std::ofstream os(argv[2]);
-	if (os.fail()) {
-		printf("Error opening output file.\n");
-		return 1;
+	if (!os) return EXIT_FAILURE;
+
+	for (auto e : ar) {
+		if (!e.f_) continue;
+		os << std::setfill('0') << std::setw(2) << std::hex << static_cast<unsigned int>(e.c_) << std::dec;
+		os << "\t";
+		os << e.f_;
+		os << std::endl;
 	}
 
-//	std::map<uint8_t, unsigned int> m;
-	std::array<uint32_t, 256> m;
-	while (1) {
-		uint8_t x;
-
-		int num = is.get();
-		
-		if (num == EOF) {
-			break;
-		}
-
-		if (is.eof()) {
-			break;
-		}
-
-		uint8_t x = num;
-
-		std::basic_ios::fill(m.start(), m.end(), 0);
-		/*if (m.find(x) == m.end()) {
-			m[x] = 1;
-		}
-		else {
-			m[x]++;
-		}*/
-
-	}
+	os.close();
 
 	return 0;
 

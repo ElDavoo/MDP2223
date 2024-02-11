@@ -122,9 +122,9 @@ public:
 template <typename T>
 std::ostream& operator<< (std::ostream& out, const arr<T> &arr) {
 	out << "n: " << arr.n_ << ", cap: " << arr.cap_, " ; ";
-	for (auto e : arr) {
+	for (const auto &e : arr) {
 		out << e;
-		out << ", ";
+		if (&e != *arr.end()) out << ", ";
 	}
 	return out;
 }
@@ -148,9 +148,11 @@ int main(int argc, char** argv) {
 
 	inputs.close();
 
+
+
 	std::sort(arr.begin(), arr.end());
 
-	for (auto e : arr) {
+	for (const auto &e : arr) {
 		outputs << e << std::endl;
 	}
 
