@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="06.cpp">
+    <ClCompile Include="lz78encode.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
