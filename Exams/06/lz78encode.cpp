@@ -45,11 +45,11 @@ public:
 };
 
 class dictionary {
-    std::map<std::vector<uint8_t>, uint8_t> dict_;
+    std::map<std::vector<uint8_t>, uint32_t> dict_;
     //std::vector<std::vector<uint8_t>> dict_;
     uint8_t maxsize_;
     unsigned int maxindex_;
-    uint8_t currentindex_;
+    uint32_t currentindex_;
 public:
     explicit dictionary(const int maxsize) : maxsize_(maxsize) {
         maxindex_ = (1 << maxsize_) - 1;
@@ -100,7 +100,7 @@ bool lz78encode(const std::string& input_filename, const std::string& output_fil
     std::ofstream os(output_filename, std::ofstream::binary);
     if (!os) return false;
 
-    bitwriter<uint8_t> bw(os);
+    bitwriter<uint32_t> bw(os);
 
     //os << "LZ78";
     bw.write('L', 8);
@@ -120,7 +120,7 @@ bool lz78encode(const std::string& input_filename, const std::string& output_fil
                 break;
             }
             is.read(&c, 1);
-            std::cout << c;
+            // std::cout << c;
             a.push_back(c);
             if (dict.search(a) == -1) break;
         }
@@ -165,5 +165,5 @@ int main(int argc, char** argv)
     bool result = lz78encode(argv[1], argv[2], std::stoi(argv[3]));
 
     return result ? EXIT_SUCCESS : EXIT_FAILURE;
-
+    
 }
