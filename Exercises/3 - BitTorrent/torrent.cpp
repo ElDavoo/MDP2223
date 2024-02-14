@@ -164,7 +164,15 @@ void belem::walk(std::ostream& os, int nspaces) const {
 		os << '{' << std::endl << sgen(nspaces);
 		bdict b = *(bdict*)(obj_);
 		for (auto e : b.dict_) {
-			os << sgen(1) << '"' << e.first.st() << "\" => ";
+			os << sgen(1) << '"';
+			for (unsigned char c : e.first.st()) {
+				if (c < 32 || c > 126) {
+					os << '.';
+				} else {
+					os << c;
+				}
+			}
+			os << "\" => ";
 			if (e.first.st() == "pieces" && e.second.type_ == S) {
 				bencode b = *(bencode*)(e.second.obj_);
 				//assert(b.st().size() % 20 == 0);
@@ -187,9 +195,12 @@ void belem::walk(std::ostream& os, int nspaces) const {
 	case S: {
 		bencode b = *(bencode*)(obj_);
 		os << '"';
-		for (char c : b.st()) {
-			if (c < 32 || c > 126) os << '.';
-			os << c;
+		for (unsigned char c : b.st()) {
+			if (c < 32 || c > 126) {
+				os << '.';
+			} else {
+				os << c;
+			}
 		}
 		os << '"';
 	}
@@ -202,7 +213,7 @@ int main(int argc, char** argv) {
 	
 	if (argc != 2) return EXIT_FAILURE;
 
-	std::ifstream is(argv[1]);
+	std::ifstream is(argv[1], std::ios::binary);
 	if (!is) return EXIT_FAILURE;
 
 	belem b(is);
