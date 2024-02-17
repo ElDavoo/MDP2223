@@ -162,7 +162,7 @@ public:
             while (i < other.getW()) {
                 int other_index = (other.depth_ * j * other.getW()) + (other.depth_ * i);
                 // depth si può mettere in evidenza
-                int our_index = (depth_ * j * w_) + (depth_ * i) + ( depth_ * other.getOffset().x  + depth_ * other.getOffset().y);
+                int our_index = (depth_ * j * w_) + (depth_ * i) + ( depth_ * other.getOffset().x  + depth_ * other.getOffset().y * w_);
                 
                 // bruttissimo (?) ma forse salva l'esame
                 uint8_t pixel1[4];
