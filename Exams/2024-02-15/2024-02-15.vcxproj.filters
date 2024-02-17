@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="2024-02-15.cpp">
+    <ClCompile Include="compose.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
